@@ -2,13 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .btn {
+    @apply px-16 pb-4 pt-5 bg-white border-2 border-white text-black rounded-lg text-2xl duration-150 ease-in-out hover:bg-black hover:text-white active:bg-grey;
+  }
+  .btn--secondary {
+    @apply px-16 pb-4 pt-5 bg-none border-2 border-white text-white rounded-lg text-2xl duration-150 ease-in-out hover:bg-white hover:text-black active:opacity-80;
+  }
+}
+
+@font-face {
+  font-family: "Zubayr";
+  src: url("../assets/fonts/Zubayr.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  background: #140b24;
+  font-family: "Zubayr", sans-serif;
+  background: #121013;
+  color: #f7f7f7;
+  scroll-behavior: smooth;
 }
 
 a {
