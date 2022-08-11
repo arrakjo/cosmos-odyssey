@@ -36,6 +36,9 @@ body {
   background: #121013;
   color: #f7f7f7;
   scroll-behavior: smooth;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 a {

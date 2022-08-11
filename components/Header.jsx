@@ -27,11 +27,11 @@ function Header() {
       <div className="hidden md:flex items-center space-x-8">
         <Link href="/locations">
           <a className="text-xl border-b duration-150 ease-in-out border-black hover:border-lightblue">
-            All locations
+            Locations
           </a>
         </Link>
 
-        <ButtonLink name="Reserve" link="#reserve" style="btn--sm" />
+        <ButtonLink name="Reserve" link="/#reserve" style="btn--sm" />
       </div>
     </header>
   );
