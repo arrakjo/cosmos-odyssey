@@ -14,7 +14,7 @@ function Hero() {
         className="rounded-2xl z-0 pointer-events-none select-none aspect-square md:aspect-video"
       />
 
-      <div className="absolute flex flex-col gap-3 bottom-12 left-10 justify-center items-start">
+      <div className="absolute flex flex-col gap-3 bottom-5 md:bottom-12 left-5 md:left-10 justify-center items-start">
         <h1 className="text-4xl lg:text-5xl max-w-xs lg:max-w-sm">
           Solar System Travel Deals
         </h1>
