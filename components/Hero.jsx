@@ -4,7 +4,7 @@ import ButtonLink from "./ButtonLink";
 
 function Hero() {
   return (
-    <div className="w-full h-80 md:h-full md:max-h-[640px] relative rounded-lg aspect-square md:aspect-video">
+    <div className="w-full h-80 md:h-full md:max-h-[640px] relative rounded-lg aspect-square md:aspect-video shadow-md">
       <Image
         src={spaceImg}
         alt="Photo by Bryan Goff on Unsplash"

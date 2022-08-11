@@ -1,10 +1,11 @@
 import burgerIcon from "../assets/images/burger.svg";
 import Link from "next/link";
 import Image from "next/image";
+import ButtonLink from "./ButtonLink";
 
 function Header() {
   return (
-    <header className="flex w-full py-5 justify-between">
+    <header className="flex w-full pb-5 pt-6 justify-between items-center">
       <Link href="/">
         <a className="text-3xl lg:text-4xl border-b duration-150 ease-in-out border-black lg:hover:border-rose">
           Cosmos Odyssey
@@ -24,24 +25,13 @@ function Header() {
       </div>
 
       <div className="hidden md:flex items-center space-x-8">
-        <Link href="#">
-          <a className="text-xl border-b duration-150 ease-in-out border-black hover:border-lightblue">
-            Reserve
-          </a>
-        </Link>
-        <Link href="#">
+        <Link href="/locations">
           <a className="text-xl border-b duration-150 ease-in-out border-black hover:border-lightblue">
             All locations
           </a>
         </Link>
-        {/* <Link href="https://www.arrak.dev">
-          <a
-            target="_blank"
-            className="text-xl border-b duration-150 ease-in-out border-black hover:border-blue"
-          >
-            Contact
-          </a>
-        </Link> */}
+
+        <ButtonLink name="Reserve" link="#reserve" style="btn--sm" />
       </div>
     </header>
   );

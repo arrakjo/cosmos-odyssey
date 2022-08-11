@@ -9,6 +9,16 @@
   .btn--secondary {
     @apply px-16 pb-4 pt-5 bg-none border-2 border-white text-white rounded-lg text-2xl duration-150 ease-in-out hover:bg-white hover:text-black active:opacity-80;
   }
+  .btn--sm {
+    @apply px-8 pb-2 pt-3 bg-white border-2 border-white text-black rounded-lg text-xl duration-150 ease-in-out hover:bg-black hover:text-white active:bg-grey;
+  }
+
+  .input {
+    @apply px-4 py-2 text-black text-xl border-2 border-white focus:border-grey rounded outline-none;
+  }
+  .label {
+    @apply flex items-center gap-2 py-2 text-xl;
+  }
 }
 
 @font-face {
@@ -35,6 +45,31 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+::selection {
+  background: #f9c4be;
+  color: #121013;
+}
+::-moz-selection {
+  background: #f9c4be;
+  color: #121013;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #dbdce1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #666;
 }
 
 /* @media (prefers-color-scheme: dark) {
