@@ -9,6 +9,7 @@ function Banner() {
         alt="Launch"
         layout="fill"
         className="pointer-events-none select-none aspect-square"
+        priority
       />
     </section>
   );

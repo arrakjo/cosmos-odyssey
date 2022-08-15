@@ -19,6 +19,15 @@
   .label {
     @apply flex items-center gap-2 py-2 text-xl;
   }
+  .select {
+    @apply px-4 py-2 w-72 h-11 text-black text-xl rounded duration-100 ease-in focus:outline focus:outline-2 focus:outline-lightblue;
+  }
+  .select-alt {
+    @apply px-4 py-2 w-72 h-11 text-black text-xl rounded duration-150 ease-in-out focus:outline focus:outline-2 focus:outline-rose;
+  }
+  .accent {
+    @apply accent-rose;
+  }
 }
 
 @font-face {

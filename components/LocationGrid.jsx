@@ -102,7 +102,7 @@ function LocationGrid() {
       </div>
 
       <div className="flex flex-col gap-5 justify-center items-center py-8">
-        <p className="text-lg">
+        <p className="text-lg text-center">
           <span className="text-lightblue">Ready to go?</span> Set up your
           reservation today
         </p>
