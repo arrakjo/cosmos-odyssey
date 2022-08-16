@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function ReserveCard({ state, origin, destination }) {
+function ReserveCard(props) {
   const [modal, setModal] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -31,16 +31,20 @@ function ReserveCard({ state, origin, destination }) {
 
   return (
     <div className="flex flex-col gap-1 bg-grey rounded-md p-10">
-      <h3 className="text-3xl mb-4 font-semibold">SpaceX</h3>
+      <h3 className="text-3xl mb-4 font-semibold">{props.provider}</h3>
       <p className="text-lg font-semibold">
-        Flight start: <span className="font-normal">xx</span>
+        Distance: <span className="font-normal">{props.distance} km</span>
       </p>
       <p className="text-lg font-semibold">
-        Flight end: <span className="font-normal">xx</span>
+        Flight start: <span className="font-normal">{props.flightStart}</span>
       </p>
-      <p className="italic mb-8">(Total travel time: xx)</p>
+      <p className="text-lg font-semibold">
+        Flight end: <span className="font-normal">{props.flightEnd}</span>
+      </p>
+      <p className="italic mb-8">(Total travel time: {props.duration})</p>
       <p className="text-xl font-semibold">
-        Total price: <span className="font-normal">€42069.00</span>
+        Total price:{" "}
+        <span className="font-normal border-b border-rose">€{props.price}</span>
       </p>
       <button className="btn--sm mt-8" onClick={handleModal}>
         Choose option
@@ -56,17 +60,21 @@ function ReserveCard({ state, origin, destination }) {
                     Your trip details
                   </p>
                   <div className="flex flex-col gap-1">
-                    <p className="text-lightgrey">Origin: {origin}</p>
+                    <p className="text-lightgrey">Origin: {props.origin}</p>
                     <p className="text-lightgrey mb-2">
-                      Destination: {destination}
+                      Destination: {props.destination}
                     </p>
-                    <p className="text-lightgrey">Provider: SpaceX</p>
-                    <p className="text-lightgrey">Start: Today, 11:29</p>
-                    <p className="text-lightgrey mb-2">End: Tomorrow, 23:59</p>
+                    <p className="text-lightgrey">Provider: {props.provider}</p>
+                    <p className="text-lightgrey">Start: {props.flightStart}</p>
+                    <p className="text-lightgrey mb-2">
+                      End: {props.flightEnd}
+                    </p>
                     <p className="text-lightgrey">
-                      Total travel time: 26265158
+                      Total travel time: {props.duration}
                     </p>
-                    <p className="text-lightgrey">Total price: €42069.00</p>
+                    <p className="text-lightgrey">
+                      Total price: €{props.price}
+                    </p>
                   </div>
                   <div className="border-b border-grey py-2"></div>
                 </div>

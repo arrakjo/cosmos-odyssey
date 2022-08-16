@@ -28,6 +28,13 @@
   .accent {
     @apply accent-rose;
   }
+
+  .btn--sort {
+    @apply p-1 w-8 h-6 bg-white rounded duration-150 ease-in-out;
+  }
+  .active {
+    @apply bg-lightblue;
+  }
 }
 
 @font-face {

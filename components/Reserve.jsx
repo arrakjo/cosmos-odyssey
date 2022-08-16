@@ -2,26 +2,106 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import pinIcon from "../assets/images/pin.svg";
 import flagIcon from "../assets/images/flag.svg";
+import upIcon from "../assets/images/up.svg";
+import downIcon from "../assets/images/down.svg";
 import Image from "next/image";
 import ReserveCard from "./ReserveCard";
+
+const locations = [
+  {
+    id: 1,
+    name: "Mercury",
+  },
+  {
+    id: 2,
+    name: "Venus",
+  },
+  {
+    id: 3,
+    name: "Earth",
+  },
+  {
+    id: 4,
+    name: "Mars",
+  },
+  {
+    id: 5,
+    name: "Jupiter",
+  },
+  {
+    id: 6,
+    name: "Saturn",
+  },
+  {
+    id: 7,
+    name: "Uranus",
+  },
+  {
+    id: 8,
+    name: "Neptune",
+  },
+];
+
+const dummyData = [
+  {
+    id: 1,
+    provider: "SpaceX",
+    price: 42069.0,
+    duration: "5 days",
+    distance: 26265158,
+    flightStart: "Today, 11:29",
+    flightEnd: "Tomorrow, 23:59",
+  },
+  {
+    id: 2,
+    provider: "Coolio",
+    price: 12345.0,
+    duration: "1 day",
+    distance: 26158,
+    flightStart: "Today, 11:29",
+    flightEnd: "Tomorrow, 23:59",
+  },
+  {
+    id: 3,
+    provider: "Space R Us",
+    price: 68095.0,
+    duration: "6 days",
+    distance: 382158,
+    flightStart: "Today, 11:29",
+    flightEnd: "Tomorrow, 23:59",
+  },
+  {
+    id: 4,
+    provider: "SpaceXpress",
+    price: 69420.0,
+    duration: "2 days",
+    distance: 143,
+    flightStart: "Today, 11:29",
+    flightEnd: "Tomorrow, 23:59",
+  },
+];
 
 function Reserve() {
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [origin, setOrigin] = useState("earth");
-  const [destination, setDestination] = useState("mars");
+  const [origin, setOrigin] = useState("Earth");
+  const [destination, setDestination] = useState("Mars");
   const [loadedResults, setLoadedResults] = useState(false);
+  const [sort, setSort] = useState(null);
+  const [filter, setFilter] = useState("");
 
   const expiryDate = new Date(data.validUntil);
   const [expires, setExpires] = useState("--:--");
 
+  // Handle the pricelist's expiration time && show that time in the UI
   const handleExpiry = () => {
     const hoursAndMinutes =
       expiryDate.getHours() + ":" + expiryDate.getMinutes();
     setExpires(`Today, ${hoursAndMinutes}`);
   };
 
+  // API call to get data when the component mounts
   useEffect(() => {
     axios
       .get(`https://cosmos-odyssey.azurewebsites.net/api/v1.0/TravelPrices`)
@@ -37,32 +117,26 @@ function Reserve() {
       });
   }, []);
 
+  // Handle the origin location, which the customer chooses
   const handleOrigin = (e) => {
     e.preventDefault();
     setOrigin(e.target.value);
   };
+  // Handle the destination location, which the customer chooses
   const handleDestination = (e) => {
     e.preventDefault();
     setDestination(e.target.value);
   };
 
-  const handleReserveSubmit = (e) => {
+  // Handle the Search button, which the customer clicks to search for a travel option (route)
+  const handleSearchSubmit = (e) => {
     e.preventDefault();
     console.log(origin, destination);
     handleExpiry();
     handleResults();
   };
 
-  // Split first letter from word and uppercase
-  const splitFirstLetter = (word) => {
-    const firstLetter = word.charAt(0).toUpperCase();
-    const restOfWord = word.slice(1);
-    return firstLetter + restOfWord;
-  };
-
-  let chosenOrigin = splitFirstLetter(origin);
-  let chosenDestination = splitFirstLetter(destination);
-
+  // Handle the results of the API call, and scroll to the results section after a slight delay
   const handleResults = () => {
     setLoadedResults(true);
     setTimeout(() => {
@@ -71,6 +145,97 @@ function Reserve() {
       });
     }, 125);
   };
+
+  // Handle the sorting logic of the results
+  const handleSort = (a, b) => {
+    if (sort === "priceLoHi") {
+      return a.price > b.price ? 1 : b.price > a.price ? -1 : 0;
+    } else if (sort === "priceHiLo") {
+      return a.price < b.price ? 1 : b.price < a.price ? -1 : 0;
+    } else if (sort === "distanceLoHi") {
+      return a.distance > b.distance ? 1 : b.distance > a.distance ? -1 : 0;
+    } else if (sort === "distanceHiLo") {
+      return a.distance < b.distance ? 1 : b.distance < a.distance ? -1 : 0;
+    } else if (sort === "durationLoHi") {
+      return a.duration > b.duration ? 1 : b.duration > a.duration ? -1 : 0;
+    } else if (sort === "durationHiLo") {
+      return a.duration < b.duration ? 1 : b.duration < a.duration ? -1 : 0;
+    } else return null;
+  };
+
+  // Filter the results based on the filter input
+  const handleFilter = (e) => {
+    setFilter(e.target.value);
+
+    if (filter === "spacex") {
+      setData(dummyData.filter((item) => item.provider === "SpaceX"));
+    } else if (filter === "coolio") {
+      setData(dummyData.filter((item) => item.provider === "Coolio"));
+    } else if (filter === "spaceRUs") {
+      setData(dummyData.filter((item) => item.provider === "Space R Us"));
+    } else if (filter === "spaceXpress") {
+      setData(dummyData.filter((item) => item.provider === "SpaceXpress"));
+    } else if (filter === "all") {
+      setData(dummyData);
+    } else return null;
+  };
+
+  // Start sorting logic
+  const sortPriceLowToHigh = (e) => {
+    e.preventDefault();
+    setSort("priceLoHi");
+    const element = document.getElementById("priceLoHi");
+    Array.from(document.querySelectorAll(".active")).forEach((el) =>
+      el.classList.remove("active")
+    );
+    element.classList.add("active");
+  };
+  const sortPriceHighToLow = (e) => {
+    e.preventDefault();
+    setSort("priceHiLo");
+    const element = document.getElementById("priceHiLo");
+    Array.from(document.querySelectorAll(".active")).forEach((el) =>
+      el.classList.remove("active")
+    );
+    element.classList.add("active");
+  };
+  const sortDistanceLowToHigh = (e) => {
+    e.preventDefault();
+    setSort("distanceLoHi");
+    const element = document.getElementById("distanceLoHi");
+    Array.from(document.querySelectorAll(".active")).forEach((el) =>
+      el.classList.remove("active")
+    );
+    element.classList.add("active");
+  };
+  const sortDistanceHighToLow = (e) => {
+    e.preventDefault();
+    setSort("distanceHiLo");
+    const element = document.getElementById("distanceHiLo");
+    Array.from(document.querySelectorAll(".active")).forEach((el) =>
+      el.classList.remove("active")
+    );
+    element.classList.add("active");
+  };
+  const sortDurationLowToHigh = (e) => {
+    e.preventDefault();
+    setSort("durationLoHi");
+    const element = document.getElementById("durationLoHi");
+    Array.from(document.querySelectorAll(".active")).forEach((el) =>
+      el.classList.remove("active")
+    );
+    element.classList.add("active");
+  };
+  const sortDurationHighToLow = (e) => {
+    e.preventDefault();
+    setSort("durationHiLo");
+    const element = document.getElementById("durationHiLo");
+    Array.from(document.querySelectorAll(".active")).forEach((el) =>
+      el.classList.remove("active")
+    );
+    element.classList.add("active");
+  };
+  // End sorting logic
 
   return (
     <section id="reserve" className="flex flex-col gap-8 pt-8 pb-8 w-full">
@@ -84,7 +249,7 @@ function Reserve() {
       </div>
 
       <div className="flex flex-col">
-        <form className="flex flex-col gap-10" onSubmit={handleReserveSubmit}>
+        <form className="flex flex-col gap-10" onSubmit={handleSearchSubmit}>
           <div className="flex flex-wrap gap-10">
             <div className="flex flex-col gap-1">
               <label htmlFor="origin" className="label">
@@ -98,14 +263,11 @@ function Reserve() {
                 value={origin}
                 onChange={handleOrigin}
               >
-                <option value="mercury">Mercury</option>
-                <option value="venus">Venus</option>
-                <option value="earth">Earth</option>
-                <option value="mars">Mars</option>
-                <option value="jupiter">Jupiter</option>
-                <option value="saturn">Saturn</option>
-                <option value="uranus">Uranus</option>
-                <option value="neptune">Neptune</option>
+                {locations.map((location) => (
+                  <option key={location.id} value={location.name}>
+                    {location.name}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -121,14 +283,11 @@ function Reserve() {
                 value={destination}
                 onChange={handleDestination}
               >
-                <option value="mercury">Mercury</option>
-                <option value="venus">Venus</option>
-                <option value="earth">Earth</option>
-                <option value="mars">Mars</option>
-                <option value="jupiter">Jupiter</option>
-                <option value="saturn">Saturn</option>
-                <option value="uranus">Uranus</option>
-                <option value="neptune">Neptune</option>
+                {locations.map((location) => (
+                  <option key={location.id} value={location.name}>
+                    {location.name}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -140,7 +299,7 @@ function Reserve() {
       <div id="results"></div>
 
       {loadedResults ? (
-        <div className="flex flex-col gap-10">
+        <div className="flex flex-col gap-10 select-none">
           <div className="w-full flex flex-wrap justify-between gap-3 pt-5">
             <p>
               Deals valid until:{" "}
@@ -153,41 +312,143 @@ function Reserve() {
             <p className="text-3xl">Showing current deals for route:</p>
             <p className="text-2xl">
               From{" "}
-              <span className="text-lightblue font-semibold">
-                {chosenOrigin}
-              </span>{" "}
-              to{" "}
-              <span className="text-rose font-semibold">
-                {chosenDestination}
-              </span>
+              <span className="text-lightblue font-semibold">{origin}</span> to{" "}
+              <span className="text-rose font-semibold">{destination}</span>
             </p>
           </div>
 
+          <div className="w-full flex flex-col md:flex-wrap md:flex-row md:items-center gap-2 md:gap-5 border-t border-lightgrey py-3">
+            <p className="text-lg font-semibold">Sort by:</p>
+
+            <div className="flex gap-2 items-center max-w-[180px] justify-between">
+              <p>Price:</p>
+              <div className="flex gap-1">
+                <span
+                  id="priceLoHi"
+                  onClick={sortPriceLowToHigh}
+                  aria-label="Sort Lowest to Highest"
+                  className="grid place-items-center cursor-pointer btn--sort"
+                >
+                  <Image
+                    src={upIcon}
+                    alt="Lowest to Highest"
+                    width={24}
+                    height={24}
+                  />
+                </span>
+                <span
+                  id="priceHiLo"
+                  onClick={sortPriceHighToLow}
+                  aria-label="Sort Highest to Lowest"
+                  className="grid place-items-center cursor-pointer btn--sort"
+                >
+                  <Image
+                    src={downIcon}
+                    alt="Highest to Lowest"
+                    width={24}
+                    height={24}
+                  />
+                </span>
+              </div>
+            </div>
+
+            <div className="flex gap-2 items-center max-w-[180px] justify-between">
+              <p>Distance:</p>
+              <div className="flex gap-1">
+                <span
+                  id="distanceLoHi"
+                  onClick={sortDistanceLowToHigh}
+                  aria-label="Sort Lowest to Highest"
+                  className="grid place-items-center cursor-pointer btn--sort"
+                >
+                  <Image
+                    src={upIcon}
+                    alt="Lowest to Highest"
+                    width={24}
+                    height={24}
+                  />
+                </span>
+                <span
+                  id="distanceHiLo"
+                  onClick={sortDistanceHighToLow}
+                  aria-label="Sort Highest to Lowest"
+                  className="grid place-items-center cursor-pointer btn--sort"
+                >
+                  <Image
+                    src={downIcon}
+                    alt="Highest to Lowest"
+                    width={24}
+                    height={24}
+                  />
+                </span>
+              </div>
+            </div>
+
+            <div className="flex gap-2 items-center max-w-[180px] justify-between">
+              <p>Travel time:</p>
+              <div className="flex gap-1">
+                <span
+                  id="durationLoHi"
+                  onClick={sortDurationLowToHigh}
+                  aria-label="Sort Lowest to Highest"
+                  className="grid place-items-center cursor-pointer btn--sort"
+                >
+                  <Image
+                    src={upIcon}
+                    alt="Lowest to Highest"
+                    width={24}
+                    height={24}
+                  />
+                </span>
+                <span
+                  id="durationHiLo"
+                  onClick={sortDurationHighToLow}
+                  aria-label="Sort Highest to Lowest"
+                  className="grid place-items-center cursor-pointer btn--sort"
+                >
+                  <Image
+                    src={downIcon}
+                    alt="Highest to Lowest"
+                    width={24}
+                    height={24}
+                  />
+                </span>
+              </div>
+            </div>
+
+            <div className="w-full flex flex-col md:flex-wrap md:flex-row md:items-center gap-2 md:gap-5 border-b border-lightgrey py-3">
+              <p className="text-lg font-semibold">Filter by Company:</p>
+              <select
+                name="filter"
+                id="filter"
+                className="select-alt text-base h-9 px-3 pt-2 pb-1"
+                value={filter}
+                onChange={handleFilter}
+              >
+                <option value="all">Show all</option>
+                {dummyData.map((item) => (
+                  <option key={item.id} value={item.provider}>
+                    {item.provider}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-            <ReserveCard
-              origin={chosenOrigin}
-              destination={chosenDestination}
-            />
-            <ReserveCard
-              origin={chosenOrigin}
-              destination={chosenDestination}
-            />
-            <ReserveCard
-              origin={chosenOrigin}
-              destination={chosenDestination}
-            />
-            <ReserveCard
-              origin={chosenOrigin}
-              destination={chosenDestination}
-            />
-            <ReserveCard
-              origin={chosenOrigin}
-              destination={chosenDestination}
-            />
-            <ReserveCard
-              origin={chosenOrigin}
-              destination={chosenDestination}
-            />
+            {dummyData.sort(handleSort).map((option) => (
+              <ReserveCard
+                key={option.id}
+                origin={origin}
+                destination={destination}
+                provider={option.provider}
+                price={option.price}
+                duration={option.duration}
+                distance={option.distance}
+                flightStart={option.flightStart}
+                flightEnd={option.flightEnd}
+              />
+            ))}
           </div>
         </div>
       ) : null}
