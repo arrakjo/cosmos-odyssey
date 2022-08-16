@@ -51,6 +51,8 @@ const dummyData = [
     distance: 26265158,
     flightStart: "Today, 11:29",
     flightEnd: "Tomorrow, 23:59",
+    from: "Earth",
+    to: "Mars",
   },
   {
     id: 2,
@@ -60,6 +62,8 @@ const dummyData = [
     distance: 26158,
     flightStart: "Today, 11:29",
     flightEnd: "Tomorrow, 23:59",
+    from: "Earth",
+    to: "Neptune",
   },
   {
     id: 3,
@@ -69,6 +73,8 @@ const dummyData = [
     distance: 382158,
     flightStart: "Today, 11:29",
     flightEnd: "Tomorrow, 23:59",
+    from: "Venus",
+    to: "Mars",
   },
   {
     id: 4,
@@ -78,6 +84,19 @@ const dummyData = [
     distance: 143,
     flightStart: "Today, 11:29",
     flightEnd: "Tomorrow, 23:59",
+    from: "Neptune",
+    to: "Earth",
+  },
+  {
+    id: 5,
+    provider: "Coolio",
+    price: 99999.0,
+    duration: "7 days",
+    distance: 65265158,
+    flightStart: "Today, 11:29",
+    flightEnd: "Tomorrow, 23:59",
+    from: "Earth",
+    to: "Mars",
   },
 ];
 
@@ -88,18 +107,12 @@ function Reserve() {
   const [origin, setOrigin] = useState("Earth");
   const [destination, setDestination] = useState("Mars");
   const [loadedResults, setLoadedResults] = useState(false);
+  const [hasResults, setHasResults] = useState(null);
   const [sort, setSort] = useState(null);
   const [filter, setFilter] = useState("");
 
   const expiryDate = new Date(data.validUntil);
   const [expires, setExpires] = useState("--:--");
-
-  // Handle the pricelist's expiration time && show that time in the UI
-  const handleExpiry = () => {
-    const hoursAndMinutes =
-      expiryDate.getHours() + ":" + expiryDate.getMinutes();
-    setExpires(`Today, ${hoursAndMinutes}`);
-  };
 
   // API call to get data when the component mounts
   useEffect(() => {
@@ -117,6 +130,13 @@ function Reserve() {
       });
   }, []);
 
+  // Handle the pricelist's expiration time && show that time in the UI
+  const handleExpiry = () => {
+    const hoursAndMinutes =
+      expiryDate.getHours() + ":" + expiryDate.getMinutes();
+    setExpires(`Today, ${hoursAndMinutes}`);
+  };
+
   // Handle the origin location, which the customer chooses
   const handleOrigin = (e) => {
     e.preventDefault();
@@ -126,6 +146,16 @@ function Reserve() {
   const handleDestination = (e) => {
     e.preventDefault();
     setDestination(e.target.value);
+  };
+
+  // Filter the initial search results based on the origin and destination chosen
+  const filterInitialResults = (e) => {
+    e.preventDefault();
+    if (origin === dummyData.from && destination === dummyData.to) {
+      setLoadedResults(true);
+    } else {
+      return null;
+    }
   };
 
   // Handle the Search button, which the customer clicks to search for a travel option (route)
@@ -144,6 +174,10 @@ function Reserve() {
         behavior: "smooth",
       });
     }, 125);
+  };
+
+  const handleInitialResults = () => {
+    dummyData.filter((item) => item.from === origin && item.to === destination);
   };
 
   // Handle the sorting logic of the results
@@ -435,28 +469,36 @@ function Reserve() {
             </div>
           </div>
 
+          {/* {dummyData
+            .filter((item) => item.from === origin && item.to === destination)
+            .map((dummyData) => (
+              <li key={dummyData.id}>
+                {dummyData.from} - {dummyData.to}
+              </li>
+            ))} */}
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-            {dummyData.length >= 1 ? (
-              dummyData
-                .sort(handleSort)
-                .map((option) => (
-                  <ReserveCard
-                    key={option.id}
-                    origin={origin}
-                    destination={destination}
-                    provider={option.provider}
-                    price={option.price}
-                    duration={option.duration}
-                    distance={option.distance}
-                    flightStart={option.flightStart}
-                    flightEnd={option.flightEnd}
-                  />
-                ))
-            ) : (
+            {dummyData
+              .filter((item) => item.from === origin && item.to === destination)
+              .sort(handleSort)
+              .map((dummyData) => (
+                <ReserveCard
+                  key={dummyData.id}
+                  origin={dummyData.from}
+                  destination={dummyData.to}
+                  provider={dummyData.provider}
+                  price={dummyData.price}
+                  duration={dummyData.duration}
+                  distance={dummyData.distance}
+                  flightStart={dummyData.flightStart}
+                  flightEnd={dummyData.flightEnd}
+                />
+              ))}
+            {/* {hasResults === false ? (
               <p className="text-xl">
-                Sorry, there are no offers available for your search.
+                Sorry, no deals found for this route. Please try another
               </p>
-            )}
+            ) : null} */}
           </div>
         </div>
       ) : null}
