@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Earth from "../assets/images/planets/earth.png";
 
 function LocationCard({ name, src, neighbor, distance, description }) {
   return (

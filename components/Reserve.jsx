@@ -299,7 +299,7 @@ function Reserve() {
       <div id="results"></div>
 
       {loadedResults ? (
-        <div className="flex flex-col gap-10 select-none">
+        <div className="flex flex-col gap-10">
           <div className="w-full flex flex-wrap justify-between gap-3 pt-5">
             <p>
               Deals valid until:{" "}
@@ -317,7 +317,7 @@ function Reserve() {
             </p>
           </div>
 
-          <div className="w-full flex flex-col md:flex-wrap md:flex-row md:items-center gap-2 md:gap-5 border-t border-lightgrey py-3">
+          <div className="w-full flex flex-col md:flex-wrap md:flex-row md:items-center gap-2 md:gap-5 border-t border-lightgrey py-3 select-none">
             <p className="text-lg font-semibold">Sort by:</p>
 
             <div className="flex gap-2 items-center max-w-[180px] justify-between">
@@ -436,19 +436,27 @@ function Reserve() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-            {dummyData.sort(handleSort).map((option) => (
-              <ReserveCard
-                key={option.id}
-                origin={origin}
-                destination={destination}
-                provider={option.provider}
-                price={option.price}
-                duration={option.duration}
-                distance={option.distance}
-                flightStart={option.flightStart}
-                flightEnd={option.flightEnd}
-              />
-            ))}
+            {dummyData.length >= 1 ? (
+              dummyData
+                .sort(handleSort)
+                .map((option) => (
+                  <ReserveCard
+                    key={option.id}
+                    origin={origin}
+                    destination={destination}
+                    provider={option.provider}
+                    price={option.price}
+                    duration={option.duration}
+                    distance={option.distance}
+                    flightStart={option.flightStart}
+                    flightEnd={option.flightEnd}
+                  />
+                ))
+            ) : (
+              <p className="text-xl">
+                Sorry, there are no offers available for your search.
+              </p>
+            )}
           </div>
         </div>
       ) : null}
