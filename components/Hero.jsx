@@ -18,7 +18,7 @@ function Hero() {
         <h1 className="text-4xl lg:text-5xl max-w-xs lg:max-w-sm">
           Solar System Travel Deals
         </h1>
-        <ButtonLink name="Explore" link="#" style="btn--secondary" />
+        <ButtonLink name="Explore" link="/#reserve" style="btn--secondary" />
       </div>
     </div>
   );

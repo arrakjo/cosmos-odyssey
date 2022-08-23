@@ -102,40 +102,11 @@ const dummyData = [
 
 function Reserve() {
   const [data, setData] = useState({});
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [origin, setOrigin] = useState("Earth");
   const [destination, setDestination] = useState("Mars");
   const [loadedResults, setLoadedResults] = useState(false);
-  const [hasResults, setHasResults] = useState(null);
   const [sort, setSort] = useState(null);
   const [filter, setFilter] = useState("");
-
-  const expiryDate = new Date(data.validUntil);
-  const [expires, setExpires] = useState("--:--");
-
-  // API call to get data when the component mounts
-  useEffect(() => {
-    axios
-      .get(`https://cosmos-odyssey.azurewebsites.net/api/v1.0/TravelPrices`)
-      .then((res) => {
-        const data = res.data;
-        setData(data);
-        console.log(data);
-      })
-      .catch((err) => {
-        setError(err);
-        setLoading(false);
-        console.error(err);
-      });
-  }, []);
-
-  // Handle the pricelist's expiration time && show that time in the UI
-  const handleExpiry = () => {
-    const hoursAndMinutes =
-      expiryDate.getHours() + ":" + expiryDate.getMinutes();
-    setExpires(`Today, ${hoursAndMinutes}`);
-  };
 
   // Handle the origin location, which the customer chooses
   const handleOrigin = (e) => {
@@ -162,7 +133,6 @@ function Reserve() {
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     console.log(origin, destination);
-    handleExpiry();
     handleResults();
   };
 
@@ -334,14 +304,6 @@ function Reserve() {
 
       {loadedResults ? (
         <div className="flex flex-col gap-10">
-          <div className="w-full flex flex-wrap justify-between gap-3 pt-5">
-            <p>
-              Deals valid until:{" "}
-              <span className="font-semibold">{expires}</span>
-            </p>
-            <p className="italic">Pricelist: {data.id}</p>
-          </div>
-
           <div className="space-y-2">
             <p className="text-3xl">Showing current deals for route:</p>
             <p className="text-2xl">

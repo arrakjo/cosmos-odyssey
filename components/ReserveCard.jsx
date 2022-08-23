@@ -15,9 +15,10 @@ function ReserveCard(props) {
     e.preventDefault();
     alert(`
             Congratulations, ${firstName} ${lastName}!
-            
-            You've reserved a trip from ${origin} to ${destination}!
+            You've reserved a trip from ${props.origin} to ${props.destination}!
         `);
+
+    setModal(false);
   };
 
   const handleFirstName = (e) => {
@@ -120,6 +121,7 @@ function ReserveCard(props) {
                       aria-required="true"
                       required
                       value={check}
+                      onClick={() => setCheck(true)}
                     />{" "}
                     I agree with the terms.
                   </label>
